@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search with Tags</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .search-box {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 60%;
+            font-size: 16px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .tag:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
 
+    <h2>Search with Filter Tags</h2>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search here..." onkeyup="updateQuery()">
+        <button onclick="search()">Search</button>
+    </div>
+
+    <div id="tagsContainer">
+        <span class="tag" onclick="addFilter('Chicago Style')">Chicago Style</span>
+        <span class="tag" onclick="addFilter('Wikipedia')">Wikipedia</span>
+        <span class="tag" onclick="addFilter('Citation')">Citation</span>
+    </div>
+
+    <script>
+        function getQueryParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get("q") || "";
+        }
+
+        function updateQuery() {
+            let searchValue = document.getElementById("searchInput").value;
+            let url = new URL(window.location.href);
+            url.searchParams.set("q", searchValue);
+            window.history.pushState({}, '', url);
+        }
+
+        function addFilter(tag) {
+            let searchInput = document.getElementById("searchInput");
+            let currentQuery = searchInput.value.trim();
+            
+            if (!currentQuery.includes(tag)) {
+                searchInput.value = currentQuery ? `${currentQuery} ${tag}` : tag;
+                updateQuery();
+            }
+        }
+
+        function search() {
+            let searchQuery = document.getElementById("searchInput").value;
+            alert("Searching for: " + searchQuery); 
+            // In a real application, redirect or fetch search results.
+        }
+
+        window.onload = function() {
+            document.getElementById("searchInput").value = getQueryParams();
+        };
+    </script>
+
+</body>
+</html>
